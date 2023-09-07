@@ -6,9 +6,8 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
         html, body, #map {
             width: 100%;
@@ -23,8 +22,7 @@
         <div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
-        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
-        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
         <script src="js/leaflet-hash.js"></script>
@@ -33,55 +31,29 @@
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
         <script src="js/leaflet.wms.js"></script>
-        <script src="js/leaflet-measure.js"></script>
-        <script src="data/UtredningskorridorA_3.js"></script>
-        <script src="data/UtredningskorridorD_4.js"></script>
-        <script src="data/UtredningskorridorC_5.js"></script>
-        <script src="data/UtredningskorridorB_6.js"></script>
-        <script src="data/Befintlig400kVLedning_7.js"></script>
-        <script src="data/Alt4bEFLA_9.js"></script>
-        <script src="data/Alt4aEFLA_10.js"></script>
-        <script src="data/TrebodaStation_11.js"></script>
+        <script src="data/NykorridorB_1.js"></script>
+        <script src="data/NykorridorA_2.js"></script>
+        <script src="data/Alt3par400kVoffset_3.js"></script>
+        <script src="data/Alt2_bef120kV_4.js"></script>
+        <script src="data/Alt1_bef220_5.js"></script>
+        <script src="data/TrebodaStation_6.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[58.490167565319446,13.703979206353045],[58.64630204530934,14.058833340790043]]);
+        })
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
-        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
-        var measureControl = new L.Control.Measure({
-            position: 'topleft',
-            primaryLengthUnit: 'meters',
-            secondaryLengthUnit: 'kilometers',
-            primaryAreaUnit: 'sqmeters',
-            secondaryAreaUnit: 'hectares'
-        });
-        measureControl.addTo(map);
-        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
-        .innerHTML = '';
-        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
-        .className += ' fas fa-ruler';
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
         }
-        map.createPane('pane_EsriWorldImagery_0');
-        map.getPane('pane_EsriWorldImagery_0').style.zIndex = 400;
-        var layer_EsriWorldImagery_0 = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            pane: 'pane_EsriWorldImagery_0',
-            opacity: 1.0,
-            attribution: '<a href="https://wiki.openstreetmap.org/wiki/Esri">Terms & Feedback</a>',
-            minZoom: 1,
-            maxZoom: 28,
-            minNativeZoom: 0,
-            maxNativeZoom: 22
-        });
-        layer_EsriWorldImagery_0;
-        map.addLayer(layer_EsriWorldImagery_0);
-        map.createPane('pane_TopografiskaWebbkartan_1');
-        map.getPane('pane_TopografiskaWebbkartan_1').style.zIndex = 401;
-        var layer_TopografiskaWebbkartan_1 = L.WMS.layer("http://karta.kungsbacka.se/geoserver/wms/wms?amp;request=GetCapabilities", "kba:topowebbkartan", {
-            pane: 'pane_TopografiskaWebbkartan_1',
+        map.createPane('pane_TopografiskaWebbkartanNedtonad_0');
+        map.getPane('pane_TopografiskaWebbkartanNedtonad_0').style.zIndex = 400;
+        var layer_TopografiskaWebbkartanNedtonad_0 = L.WMS.layer("http://karta.kungsbacka.se/geoserver/wms/wms?amp;request=GetCapabilities", "kba:topowebbkartan_nedtonad", {
+            pane: 'pane_TopografiskaWebbkartanNedtonad_0',
             format: 'image/png',
             uppercase: true,
             transparent: true,
@@ -92,272 +64,8 @@
             identify: false,
             attribution: '',
         });
-        map.addLayer(layer_TopografiskaWebbkartan_1);
-        map.createPane('pane_TopografiskaWebbkartanNedtonad_2');
-        map.getPane('pane_TopografiskaWebbkartanNedtonad_2').style.zIndex = 402;
-        var layer_TopografiskaWebbkartanNedtonad_2 = L.WMS.layer("http://karta.kungsbacka.se/geoserver/wms/wms?amp;request=GetCapabilities", "kba:topowebbkartan_nedtonad", {
-            pane: 'pane_TopografiskaWebbkartanNedtonad_2',
-            format: 'image/png',
-            uppercase: true,
-            transparent: true,
-            continuousWorld : true,
-            tiled: true,
-            info_format: 'text/html',
-            opacity: 1,
-            identify: false,
-            attribution: '',
-        });
-        map.addLayer(layer_TopografiskaWebbkartanNedtonad_2);
-        function pop_UtredningskorridorA_3(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['AGARE'] !== null ? autolinker.link(feature.properties['AGARE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['INSAMLINGS'] !== null ? autolinker.link(feature.properties['INSAMLINGS'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LITTERA'] !== null ? autolinker.link(feature.properties['LITTERA'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MATOSAKERH'] !== null ? autolinker.link(feature.properties['MATOSAKERH'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SPANNING'] !== null ? autolinker.link(feature.properties['SPANNING'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['STATUSDRIF'] !== null ? autolinker.link(feature.properties['STATUSDRIF'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['STATUS'] !== null ? autolinker.link(feature.properties['STATUS'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['STROMTYP'] !== null ? autolinker.link(feature.properties['STROMTYP'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NAMN'] !== null ? autolinker.link(feature.properties['NAMN'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SHAPE_STLe'] !== null ? autolinker.link(feature.properties['SHAPE_STLe'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['BUFF_DIST'] !== null ? autolinker.link(feature.properties['BUFF_DIST'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ORIG_FID'] !== null ? autolinker.link(feature.properties['ORIG_FID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        var pattern_UtredningskorridorA_3_0 = new L.StripePattern({
-            weight: 0.3,
-            spaceWeight: 2.0,
-            color: '#4daf4a',
-            opacity: 1.0,
-            spaceOpacity: 0,
-            angle: 225
-        });
-        pattern_UtredningskorridorA_3_0.addTo(map);
-        function style_UtredningskorridorA_3_0() {
-            return {
-                pane: 'pane_UtredningskorridorA_3',
-                stroke: false,
-                fillOpacity: 1,
-                fillPattern: pattern_UtredningskorridorA_3_0,
-                interactive: true,
-            }
-        }
-        function style_UtredningskorridorA_3_1() {
-            return {
-                pane: 'pane_UtredningskorridorA_3',
-                opacity: 1,
-                color: 'rgba(77,175,74,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 2.0,
-                fillOpacity: 0,
-                interactive: true,
-            }
-        }
-        map.createPane('pane_UtredningskorridorA_3');
-        map.getPane('pane_UtredningskorridorA_3').style.zIndex = 403;
-        map.getPane('pane_UtredningskorridorA_3').style['mix-blend-mode'] = 'normal';
-        var layer_UtredningskorridorA_3 = new L.geoJson.multiStyle(json_UtredningskorridorA_3, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_UtredningskorridorA_3',
-            layerName: 'layer_UtredningskorridorA_3',
-            pane: 'pane_UtredningskorridorA_3',
-            onEachFeature: pop_UtredningskorridorA_3,
-            styles: [style_UtredningskorridorA_3_0,style_UtredningskorridorA_3_1,]
-        });
-        bounds_group.addLayer(layer_UtredningskorridorA_3);
-        map.addLayer(layer_UtredningskorridorA_3);
-        function pop_UtredningskorridorD_4(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Id'] !== null ? autolinker.link(feature.properties['Id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        var pattern_UtredningskorridorD_4_0 = new L.StripePattern({
-            weight: 0.3,
-            spaceWeight: 2.0,
-            color: '#377eb8',
-            opacity: 1.0,
-            spaceOpacity: 0,
-            angle: 225
-        });
-        pattern_UtredningskorridorD_4_0.addTo(map);
-        function style_UtredningskorridorD_4_0() {
-            return {
-                pane: 'pane_UtredningskorridorD_4',
-                stroke: false,
-                fillOpacity: 1,
-                fillPattern: pattern_UtredningskorridorD_4_0,
-                interactive: true,
-            }
-        }
-        function style_UtredningskorridorD_4_1() {
-            return {
-                pane: 'pane_UtredningskorridorD_4',
-                opacity: 1,
-                color: 'rgba(55,126,184,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 2.0,
-                fillOpacity: 0,
-                interactive: true,
-            }
-        }
-        map.createPane('pane_UtredningskorridorD_4');
-        map.getPane('pane_UtredningskorridorD_4').style.zIndex = 404;
-        map.getPane('pane_UtredningskorridorD_4').style['mix-blend-mode'] = 'normal';
-        var layer_UtredningskorridorD_4 = new L.geoJson.multiStyle(json_UtredningskorridorD_4, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_UtredningskorridorD_4',
-            layerName: 'layer_UtredningskorridorD_4',
-            pane: 'pane_UtredningskorridorD_4',
-            onEachFeature: pop_UtredningskorridorD_4,
-            styles: [style_UtredningskorridorD_4_0,style_UtredningskorridorD_4_1,]
-        });
-        bounds_group.addLayer(layer_UtredningskorridorD_4);
-        map.addLayer(layer_UtredningskorridorD_4);
-        function pop_UtredningskorridorC_5(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Id'] !== null ? autolinker.link(feature.properties['Id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        var pattern_UtredningskorridorC_5_0 = new L.StripePattern({
-            weight: 0.3,
-            spaceWeight: 2.0,
-            color: '#9d9d9d',
-            opacity: 1.0,
-            spaceOpacity: 0,
-            angle: 225
-        });
-        pattern_UtredningskorridorC_5_0.addTo(map);
-        function style_UtredningskorridorC_5_0() {
-            return {
-                pane: 'pane_UtredningskorridorC_5',
-                stroke: false,
-                fillOpacity: 1,
-                fillPattern: pattern_UtredningskorridorC_5_0,
-                interactive: true,
-            }
-        }
-        function style_UtredningskorridorC_5_1() {
-            return {
-                pane: 'pane_UtredningskorridorC_5',
-                opacity: 1,
-                color: 'rgba(157,157,157,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 2.0,
-                fillOpacity: 0,
-                interactive: true,
-            }
-        }
-        map.createPane('pane_UtredningskorridorC_5');
-        map.getPane('pane_UtredningskorridorC_5').style.zIndex = 405;
-        map.getPane('pane_UtredningskorridorC_5').style['mix-blend-mode'] = 'normal';
-        var layer_UtredningskorridorC_5 = new L.geoJson.multiStyle(json_UtredningskorridorC_5, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_UtredningskorridorC_5',
-            layerName: 'layer_UtredningskorridorC_5',
-            pane: 'pane_UtredningskorridorC_5',
-            onEachFeature: pop_UtredningskorridorC_5,
-            styles: [style_UtredningskorridorC_5_0,style_UtredningskorridorC_5_1,]
-        });
-        bounds_group.addLayer(layer_UtredningskorridorC_5);
-        map.addLayer(layer_UtredningskorridorC_5);
-        function pop_UtredningskorridorB_6(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Id'] !== null ? autolinker.link(feature.properties['Id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        var pattern_UtredningskorridorB_6_0 = new L.StripePattern({
-            weight: 0.3,
-            spaceWeight: 2.0,
-            color: '#9d9d9d',
-            opacity: 1.0,
-            spaceOpacity: 0,
-            angle: 315
-        });
-        pattern_UtredningskorridorB_6_0.addTo(map);
-        function style_UtredningskorridorB_6_0() {
-            return {
-                pane: 'pane_UtredningskorridorB_6',
-                stroke: false,
-                fillOpacity: 1,
-                fillPattern: pattern_UtredningskorridorB_6_0,
-                interactive: true,
-            }
-        }
-        function style_UtredningskorridorB_6_1() {
-            return {
-                pane: 'pane_UtredningskorridorB_6',
-                opacity: 1,
-                color: 'rgba(157,157,157,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 2.0,
-                fillOpacity: 0,
-                interactive: true,
-            }
-        }
-        map.createPane('pane_UtredningskorridorB_6');
-        map.getPane('pane_UtredningskorridorB_6').style.zIndex = 406;
-        map.getPane('pane_UtredningskorridorB_6').style['mix-blend-mode'] = 'normal';
-        var layer_UtredningskorridorB_6 = new L.geoJson.multiStyle(json_UtredningskorridorB_6, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_UtredningskorridorB_6',
-            layerName: 'layer_UtredningskorridorB_6',
-            pane: 'pane_UtredningskorridorB_6',
-            onEachFeature: pop_UtredningskorridorB_6,
-            styles: [style_UtredningskorridorB_6_0,style_UtredningskorridorB_6_1,]
-        });
-        bounds_group.addLayer(layer_UtredningskorridorB_6);
-        map.addLayer(layer_UtredningskorridorB_6);
-        function pop_Befintlig400kVLedning_7(feature, layer) {
+        map.addLayer(layer_TopografiskaWebbkartanNedtonad_0);
+        function pop_NykorridorB_1(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
@@ -372,91 +80,34 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_Befintlig400kVLedning_7_0() {
+        function style_NykorridorB_1_0() {
             return {
-                pane: 'pane_Befintlig400kVLedning_7',
+                pane: 'pane_NykorridorB_1',
                 opacity: 1,
-                color: 'rgba(173,11,232,1.0)',
+                color: 'rgba(148,224,33,1.0)',
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 4.0,
+                weight: 3.0,
                 fillOpacity: 0,
                 interactive: true,
             }
         }
-        map.createPane('pane_Befintlig400kVLedning_7');
-        map.getPane('pane_Befintlig400kVLedning_7').style.zIndex = 407;
-        map.getPane('pane_Befintlig400kVLedning_7').style['mix-blend-mode'] = 'normal';
-        var layer_Befintlig400kVLedning_7 = new L.geoJson(json_Befintlig400kVLedning_7, {
+        map.createPane('pane_NykorridorB_1');
+        map.getPane('pane_NykorridorB_1').style.zIndex = 401;
+        map.getPane('pane_NykorridorB_1').style['mix-blend-mode'] = 'normal';
+        var layer_NykorridorB_1 = new L.geoJson(json_NykorridorB_1, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Befintlig400kVLedning_7',
-            layerName: 'layer_Befintlig400kVLedning_7',
-            pane: 'pane_Befintlig400kVLedning_7',
-            onEachFeature: pop_Befintlig400kVLedning_7,
-            style: style_Befintlig400kVLedning_7_0,
+            dataVar: 'json_NykorridorB_1',
+            layerName: 'layer_NykorridorB_1',
+            pane: 'pane_NykorridorB_1',
+            onEachFeature: pop_NykorridorB_1,
+            style: style_NykorridorB_1_0,
         });
-        bounds_group.addLayer(layer_Befintlig400kVLedning_7);
-        map.addLayer(layer_Befintlig400kVLedning_7);
-        map.createPane('pane_TopografiskaWebbkartan_8');
-        map.getPane('pane_TopografiskaWebbkartan_8').style.zIndex = 408;
-        var layer_TopografiskaWebbkartan_8 = L.WMS.layer("http://karta.kungsbacka.se/geoserver/wms/wms?amp;request=GetCapabilities", "kba:topowebbkartan_cachetest", {
-            pane: 'pane_TopografiskaWebbkartan_8',
-            format: 'image/png',
-            uppercase: true,
-            transparent: true,
-            continuousWorld : true,
-            tiled: true,
-            info_format: 'text/html',
-            opacity: 1,
-            identify: false,
-            attribution: '',
-        });
-        map.addLayer(layer_TopografiskaWebbkartan_8);
-        function pop_Alt4bEFLA_9(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['FÖRLÄGGN_'] !== null ? autolinker.link(feature.properties['FÖRLÄGGN_'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SPÄNNING'] !== null ? autolinker.link(feature.properties['SPÄNNING'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        function style_Alt4bEFLA_9_0() {
-            return {
-                pane: 'pane_Alt4bEFLA_9',
-                opacity: 1,
-                color: 'rgba(72,228,0,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 4.0,
-                fillOpacity: 0,
-                interactive: true,
-            }
-        }
-        map.createPane('pane_Alt4bEFLA_9');
-        map.getPane('pane_Alt4bEFLA_9').style.zIndex = 409;
-        map.getPane('pane_Alt4bEFLA_9').style['mix-blend-mode'] = 'normal';
-        var layer_Alt4bEFLA_9 = new L.geoJson(json_Alt4bEFLA_9, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_Alt4bEFLA_9',
-            layerName: 'layer_Alt4bEFLA_9',
-            pane: 'pane_Alt4bEFLA_9',
-            onEachFeature: pop_Alt4bEFLA_9,
-            style: style_Alt4bEFLA_9_0,
-        });
-        bounds_group.addLayer(layer_Alt4bEFLA_9);
-        map.addLayer(layer_Alt4bEFLA_9);
-        function pop_Alt4aEFLA_10(feature, layer) {
+        bounds_group.addLayer(layer_NykorridorB_1);
+        map.addLayer(layer_NykorridorB_1);
+        function pop_NykorridorA_2(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
@@ -477,34 +128,187 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_Alt4aEFLA_10_0() {
+        function style_NykorridorA_2_0() {
             return {
-                pane: 'pane_Alt4aEFLA_10',
+                pane: 'pane_NykorridorA_2',
                 opacity: 1,
-                color: 'rgba(255,128,54,1.0)',
+                color: 'rgba(255,158,23,1.0)',
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 4.0,
+                weight: 3.0,
                 fillOpacity: 0,
                 interactive: true,
             }
         }
-        map.createPane('pane_Alt4aEFLA_10');
-        map.getPane('pane_Alt4aEFLA_10').style.zIndex = 410;
-        map.getPane('pane_Alt4aEFLA_10').style['mix-blend-mode'] = 'normal';
-        var layer_Alt4aEFLA_10 = new L.geoJson(json_Alt4aEFLA_10, {
+        map.createPane('pane_NykorridorA_2');
+        map.getPane('pane_NykorridorA_2').style.zIndex = 402;
+        map.getPane('pane_NykorridorA_2').style['mix-blend-mode'] = 'normal';
+        var layer_NykorridorA_2 = new L.geoJson(json_NykorridorA_2, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Alt4aEFLA_10',
-            layerName: 'layer_Alt4aEFLA_10',
-            pane: 'pane_Alt4aEFLA_10',
-            onEachFeature: pop_Alt4aEFLA_10,
-            style: style_Alt4aEFLA_10_0,
+            dataVar: 'json_NykorridorA_2',
+            layerName: 'layer_NykorridorA_2',
+            pane: 'pane_NykorridorA_2',
+            onEachFeature: pop_NykorridorA_2,
+            style: style_NykorridorA_2_0,
         });
-        bounds_group.addLayer(layer_Alt4aEFLA_10);
-        map.addLayer(layer_Alt4aEFLA_10);
-        function pop_TrebodaStation_11(feature, layer) {
+        bounds_group.addLayer(layer_NykorridorA_2);
+        map.addLayer(layer_NykorridorA_2);
+        function pop_Alt3par400kVoffset_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FÖRLÄGGN_'] !== null ? autolinker.link(feature.properties['FÖRLÄGGN_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SPÄNNING'] !== null ? autolinker.link(feature.properties['SPÄNNING'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Alt3par400kVoffset_3_0() {
+            return {
+                pane: 'pane_Alt3par400kVoffset_3',
+                opacity: 1,
+                color: 'rgba(184,80,175,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Alt3par400kVoffset_3');
+        map.getPane('pane_Alt3par400kVoffset_3').style.zIndex = 403;
+        map.getPane('pane_Alt3par400kVoffset_3').style['mix-blend-mode'] = 'normal';
+        var layer_Alt3par400kVoffset_3 = new L.geoJson(json_Alt3par400kVoffset_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Alt3par400kVoffset_3',
+            layerName: 'layer_Alt3par400kVoffset_3',
+            pane: 'pane_Alt3par400kVoffset_3',
+            onEachFeature: pop_Alt3par400kVoffset_3,
+            style: style_Alt3par400kVoffset_3_0,
+        });
+        bounds_group.addLayer(layer_Alt3par400kVoffset_3);
+        map.addLayer(layer_Alt3par400kVoffset_3);
+        function pop_Alt2_bef120kV_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAMN'] !== null ? autolinker.link(feature.properties['NAMN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LITTERA'] !== null ? autolinker.link(feature.properties['LITTERA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['AGARE'] !== null ? autolinker.link(feature.properties['AGARE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SPANNING'] !== null ? autolinker.link(feature.properties['SPANNING'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FORLAGGNIN'] !== null ? autolinker.link(feature.properties['FORLAGGNIN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DATAKVALIT'] !== null ? autolinker.link(feature.properties['DATAKVALIT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UPPDATERAD'] !== null ? autolinker.link(feature.properties['UPPDATERAD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LEVERANS_D'] !== null ? autolinker.link(feature.properties['LEVERANS_D'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['STATUS'] !== null ? autolinker.link(feature.properties['STATUS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UPPDATER_1'] !== null ? autolinker.link(feature.properties['UPPDATER_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_STLe'] !== null ? autolinker.link(feature.properties['SHAPE_STLe'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? autolinker.link(feature.properties['Shape_Leng'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Alt2_bef120kV_4_0() {
+            return {
+                pane: 'pane_Alt2_bef120kV_4',
+                opacity: 1,
+                color: 'rgba(31,120,180,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Alt2_bef120kV_4');
+        map.getPane('pane_Alt2_bef120kV_4').style.zIndex = 404;
+        map.getPane('pane_Alt2_bef120kV_4').style['mix-blend-mode'] = 'normal';
+        var layer_Alt2_bef120kV_4 = new L.geoJson(json_Alt2_bef120kV_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Alt2_bef120kV_4',
+            layerName: 'layer_Alt2_bef120kV_4',
+            pane: 'pane_Alt2_bef120kV_4',
+            onEachFeature: pop_Alt2_bef120kV_4,
+            style: style_Alt2_bef120kV_4_0,
+        });
+        bounds_group.addLayer(layer_Alt2_bef120kV_4);
+        map.addLayer(layer_Alt2_bef120kV_4);
+        function pop_Alt1_bef220_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FÖRLÄGGN'] !== null ? autolinker.link(feature.properties['FÖRLÄGGN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SPÄNNING'] !== null ? autolinker.link(feature.properties['SPÄNNING'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Alt1_bef220_5_0() {
+            return {
+                pane: 'pane_Alt1_bef220_5',
+                opacity: 1,
+                color: 'rgba(53,185,66,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Alt1_bef220_5');
+        map.getPane('pane_Alt1_bef220_5').style.zIndex = 405;
+        map.getPane('pane_Alt1_bef220_5').style['mix-blend-mode'] = 'normal';
+        var layer_Alt1_bef220_5 = new L.geoJson(json_Alt1_bef220_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Alt1_bef220_5',
+            layerName: 'layer_Alt1_bef220_5',
+            pane: 'pane_Alt1_bef220_5',
+            onEachFeature: pop_Alt1_bef220_5,
+            style: style_Alt1_bef220_5_0,
+        });
+        bounds_group.addLayer(layer_Alt1_bef220_5);
+        map.addLayer(layer_Alt1_bef220_5);
+        function pop_TrebodaStation_6(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['Id'] !== null ? autolinker.link(feature.properties['Id'].toLocaleString()) : '') + '</td>\
@@ -513,9 +317,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_TrebodaStation_11_0() {
+        function style_TrebodaStation_6_0() {
             return {
-                pane: 'pane_TrebodaStation_11',
+                pane: 'pane_TrebodaStation_6',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -528,33 +332,21 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_TrebodaStation_11');
-        map.getPane('pane_TrebodaStation_11').style.zIndex = 411;
-        map.getPane('pane_TrebodaStation_11').style['mix-blend-mode'] = 'normal';
-        var layer_TrebodaStation_11 = new L.geoJson(json_TrebodaStation_11, {
+        map.createPane('pane_TrebodaStation_6');
+        map.getPane('pane_TrebodaStation_6').style.zIndex = 406;
+        map.getPane('pane_TrebodaStation_6').style['mix-blend-mode'] = 'normal';
+        var layer_TrebodaStation_6 = new L.geoJson(json_TrebodaStation_6, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_TrebodaStation_11',
-            layerName: 'layer_TrebodaStation_11',
-            pane: 'pane_TrebodaStation_11',
-            onEachFeature: pop_TrebodaStation_11,
-            style: style_TrebodaStation_11_0,
+            dataVar: 'json_TrebodaStation_6',
+            layerName: 'layer_TrebodaStation_6',
+            pane: 'pane_TrebodaStation_6',
+            onEachFeature: pop_TrebodaStation_6,
+            style: style_TrebodaStation_6_0,
         });
-        bounds_group.addLayer(layer_TrebodaStation_11);
-        map.addLayer(layer_TrebodaStation_11);
-        var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/TrebodaStation_11.png" /> Töreboda - Station': layer_TrebodaStation_11,'<img src="legend/Alt4aEFLA_10.png" /> Alt 4a - EFLA': layer_Alt4aEFLA_10,'<img src="legend/Alt4bEFLA_9.png" /> Alt 4b - EFLA': layer_Alt4bEFLA_9,"Topografiska Webbkartan": layer_TopografiskaWebbkartan_8,'<img src="legend/Befintlig400kVLedning_7.png" /> Befintlig 400 kV-Ledning': layer_Befintlig400kVLedning_7,'<img src="legend/UtredningskorridorB_6.png" /> UtredningskorridorB': layer_UtredningskorridorB_6,'<img src="legend/UtredningskorridorC_5.png" /> UtredningskorridorC': layer_UtredningskorridorC_5,'<img src="legend/UtredningskorridorD_4.png" /> UtredningskorridorD': layer_UtredningskorridorD_4,'<img src="legend/UtredningskorridorA_3.png" /> UtredningskorridorA': layer_UtredningskorridorA_3,"Topografiska Webbkartan Nedtonad": layer_TopografiskaWebbkartanNedtonad_2,"Topografiska Webbkartan": layer_TopografiskaWebbkartan_1,"Esri World Imagery": layer_EsriWorldImagery_0,},{collapsed:false}).addTo(map);
+        bounds_group.addLayer(layer_TrebodaStation_6);
+        map.addLayer(layer_TrebodaStation_6);
         setBounds();
-        resetLabels([layer_UtredningskorridorA_3,layer_UtredningskorridorD_4,layer_UtredningskorridorC_5,layer_UtredningskorridorB_6]);
-        map.on("zoomend", function(){
-            resetLabels([layer_UtredningskorridorA_3,layer_UtredningskorridorD_4,layer_UtredningskorridorC_5,layer_UtredningskorridorB_6]);
-        });
-        map.on("layeradd", function(){
-            resetLabels([layer_UtredningskorridorA_3,layer_UtredningskorridorD_4,layer_UtredningskorridorC_5,layer_UtredningskorridorB_6]);
-        });
-        map.on("layerremove", function(){
-            resetLabels([layer_UtredningskorridorA_3,layer_UtredningskorridorD_4,layer_UtredningskorridorC_5,layer_UtredningskorridorB_6]);
-        });
         </script>
     </body>
 </html>
